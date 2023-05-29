@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Component1, Component3, Component4 } from "./components";
 import Component2 from "./components/Component2";
 // import { Component3, Component4 } from "./components/functionalComponents";
@@ -17,15 +17,23 @@ function App() {
     setShowFirstComponent((prev) => !prev);
   };
 
+  // useEffect(() => {
+  //   console.log("consoling from parent... App.js....");
+
+  //   return () => {
+  //     console.log("unmounting parent");
+  //   };
+  // }, []);
+
   return (
     <>
-      {showFirstComponent ? <Component1 /> : <Component2 />}
+      {/* {showFirstComponent ? <Component1 /> : <Component2 />}
 
       <button onClick={toggleShowComponentOne}>
         Show Component{showFirstComponent ? "2" : "1"}
       </button>
 
-      <hr />
+      <hr /> */}
 
       {!toggleThirdComponent ? <Component3 /> : <Component4 />}
 
