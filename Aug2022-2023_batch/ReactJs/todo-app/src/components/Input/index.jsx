@@ -22,6 +22,13 @@ export const Input = (props) => {
           borderRadius: "8px",
           fontSize: "20px",
         }}
+        onKeyDown={(event) => {
+          if (event.code === "Enter") {
+            event.preventDefault();
+            props.handleSaveTodo(todo);
+            setTodo("");
+          }
+        }}
       />
       <button
         onClick={(event) => {

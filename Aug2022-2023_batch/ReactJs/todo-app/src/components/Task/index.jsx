@@ -1,3 +1,5 @@
+import { faCheck, faCheckDouble, faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 export const Task = (props) => {
@@ -28,25 +30,33 @@ export const Task = (props) => {
           backgroundColor: "white",
           display: "flex",
           paddingRight: "15px",
+          justifyContent: "space-around",
+          alignItems: "center",
+          width: "100px",
         }}
       >
-        <button
-          style={{ marginRight: "5px" }}
-          onClick={props.markTodoDone}
-          disabled={props.todo.isDone}
-        >
-          Done
-        </button>
-        <button
-          style={{ marginRight: "5px" }}
-          onClick={props.editTodo}
-          disabled={props.todo.isDone}
-        >
-          Edit
-        </button>
-        <button style={{ marginRight: "5px" }} onClick={props.deleteTodo}>
-          Delete
-        </button>
+        <FontAwesomeIcon
+          icon={faCheckDouble}
+          style={{ cursor: "pointer" }}
+          onClick={props.todo.isDone ? null : props.markTodoDone}
+          color="green"
+          size="1.5x"
+          opacity={props.todo.isDone ? 0.4 : 1}
+        />
+        <FontAwesomeIcon
+          icon={faPencilAlt}
+          style={{ cursor: "pointer" }}
+          onClick={props.todo.isDone ? null : props.editTodo}
+          size="1.5x"
+          opacity={props.todo.isDone ? 0.4 : 1}
+        />
+        <FontAwesomeIcon
+          icon={faTrashAlt}
+          style={{ cursor: "pointer" }}
+          onClick={props.deleteTodo}
+          color="red"
+          size="1.5x"
+        />
       </div>
     </div>
   );
