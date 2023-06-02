@@ -30,10 +30,18 @@ export const Task = (props) => {
           paddingRight: "15px",
         }}
       >
-        <button style={{ marginRight: "5px" }} onClick={props.markTodoDone}>
+        <button
+          style={{ marginRight: "5px" }}
+          onClick={props.markTodoDone}
+          disabled={props.todo.isDone}
+        >
           Done
         </button>
-        <button style={{ marginRight: "5px" }} onClick={props.editTodo}>
+        <button
+          style={{ marginRight: "5px" }}
+          onClick={props.editTodo}
+          disabled={props.todo.isDone}
+        >
           Edit
         </button>
         <button style={{ marginRight: "5px" }} onClick={props.deleteTodo}>

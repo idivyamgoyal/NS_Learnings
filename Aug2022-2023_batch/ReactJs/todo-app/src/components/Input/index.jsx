@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const Input = (props) => {
-  const [todo, setTodo] = useState("");
+  const [todo, setTodo] = useState(props.isEditing ? props.todoValue : "");
 
   return (
     <div
@@ -11,7 +11,7 @@ export const Input = (props) => {
       }}
     >
       <input
-        placeholder="Type Todo..."
+        placeholder={"Type Todo..."}
         onChange={(event) => {
           setTodo(event.target.value);
         }}
@@ -26,7 +26,7 @@ export const Input = (props) => {
       <button
         onClick={(event) => {
           event.preventDefault();
-          props.addTodo(todo);
+          props.handleSaveTodo(todo);
           setTodo("");
         }}
         style={{
@@ -37,7 +37,7 @@ export const Input = (props) => {
           backgroundColor: "lightGreen",
         }}
       >
-        Add
+        {props.isEditing ? "Done" : "Add"}
       </button>
     </div>
   );
