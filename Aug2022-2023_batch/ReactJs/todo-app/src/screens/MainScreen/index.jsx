@@ -1,59 +1,41 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { EditTodo, Input, Task } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
 
 export const MainScreen = (props) => {
-  const [todos, setTodos] = useState([]);
+  // store
+  const todos = useSelector((state) => state.todos);
+
+  // hooks, refs, states
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editingTodo, setEditingTodo] = useState();
-  const updatingIdx = useRef();
 
   /**this function will add new-todo in the todo-list
    * @param todo this is the new todo which will be added in the list which is inserted in the end
    */
   const addTodo = (todo) => {
-    if (todo === null || todo === undefined || todo === "") {
-      window.alert("Empty Todo! Please enter a value to proceed...");
-      return;
-    }
-
-    setTodos((prev) => [...prev, { value: todo, isDone: false }]);
+    dispatch({ type: "todos/addTodo", payload: { todo } });
   };
 
   /**this function marks a todo done
-   * @param index this index will be marked as done
+   * @param todoId the todo associated with this todoId will be marked as done
    */
-  const markTodoDone = (index) => {
-    const todos_copy = todos.filter((todo, todoIndex) => {
-      if (index === todoIndex) {
-        todo.isDone = true;
-      }
-
-      return todo;
-    });
-
-    setTodos(todos_copy);
+  const markTodoDone = (todoId) => {
+    dispatch({ type: "todos/markTodoDone", payload: { todoId } });
   };
 
   /**this function deletes a todo
-   * @param index this index will be deleted from the todo
+   * @param todoId the todo associated with this todoId will be deleted
    */
-  const deleteTodo = (index) => {
-    const todo_copy = todos.filter((todo, todoIndex) => {
-      if (index === todoIndex) {
-        // skip this todo, and don't return anything
-      } else {
-        return todo;
-      }
-    });
-
-    setTodos(todo_copy);
+  const deleteTodo = (todoId) => {
+    dispatch({ type: "todos/deleteTodo", payload: { todoId } });
   };
 
   /** this function take care to store the index of the todo which will be edited
    * @param index expect an index of the todo which need to be updated
    */
   const editTodo = (index) => {
-    updatingIdx.current = index;
     setIsEditing(true);
     setEditingTodo({ ...todos[index] });
   };
@@ -62,15 +44,7 @@ export const MainScreen = (props) => {
    * @param todoValue this is the updated todos-value which will be updated in the original list
    */
   const saveEditTodo = (todoValue) => {
-    const todos_copy = todos.filter((todo, idx) => {
-      if (updatingIdx.current === idx) {
-        todo.value = todoValue;
-      }
-
-      return todo;
-    });
-
-    setTodos(todos_copy);
+    dispatch({ type: "todos/saveEditTodo", payload: { todoId: editingTodo.id, value: todoValue } });
     hideEditing();
   };
 
@@ -87,7 +61,6 @@ export const MainScreen = (props) => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        // backgroundColor: "red",
       }}
     >
       {isEditing && (
@@ -104,15 +77,15 @@ export const MainScreen = (props) => {
           <Task
             todo={todo}
             markTodoDone={() => {
-              markTodoDone(index);
+              markTodoDone(todo.id);
             }}
             editTodo={() => {
               editTodo(index);
             }}
             deleteTodo={() => {
-              deleteTodo(index);
+              deleteTodo(todo.id);
             }}
-            key={`${todo.value}{index}`}
+            key={todo.id}
           />
         );
       })}
