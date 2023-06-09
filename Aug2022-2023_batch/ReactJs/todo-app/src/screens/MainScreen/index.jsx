@@ -13,9 +13,10 @@ export const MainScreen = (props) => {
 
   /**this function will add new-todo in the todo-list
    * @param todo this is the new todo which will be added in the list which is inserted in the end
+   * @param priority this is the todo priority on which the todos are sorted and displayed
    */
-  const addTodo = (todo) => {
-    dispatch({ type: "todos/addTodo", payload: { todo } });
+  const addTodo = (todo, priority) => {
+    dispatch({ type: "todos/addTodo", payload: { todo, priority } });
   };
 
   /**this function marks a todo done
@@ -42,9 +43,13 @@ export const MainScreen = (props) => {
 
   /** this function will handle the saving of the updated todo
    * @param todoValue this is the updated todos-value which will be updated in the original list
+   * @param updatedPriority this is the updated-todo priority on which the todos are sorted and displayed
    */
-  const saveEditTodo = (todoValue) => {
-    dispatch({ type: "todos/saveEditTodo", payload: { todoId: editingTodo.id, value: todoValue } });
+  const saveEditTodo = (todoValue, updatedPriority) => {
+    dispatch({
+      type: "todos/saveEditTodo",
+      payload: { todoId: editingTodo.id, value: todoValue, priority: updatedPriority },
+    });
     hideEditing();
   };
 

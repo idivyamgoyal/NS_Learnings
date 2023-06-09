@@ -41,7 +41,12 @@ export const EditTodo = (props) => {
         >
           <h5 style={{ color: "white" }}>X</h5>
         </div>
-        <Input isEditing handleSaveTodo={props.handleSaveTodo} todoValue={props.todo.value} />
+        <Input
+          isEditing
+          handleSaveTodo={props.handleSaveTodo}
+          todoValue={props.todo.value}
+          todoPriority={props.todo.priority}
+        />
       </div>
     </div>
   );

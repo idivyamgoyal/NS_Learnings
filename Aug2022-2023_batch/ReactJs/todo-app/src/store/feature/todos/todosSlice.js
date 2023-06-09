@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const PRIORITY_LABEL_ORDER = {
+  High: 1,
+  Mid: 2,
+  Low: 3,
+};
+
 const todoSlice = createSlice({
   name: "todos",
   initialState: [],
@@ -17,6 +23,11 @@ const todoSlice = createSlice({
         value: action.payload.todo,
         isDone: false,
         id: Date.now(),
+        priority: action.payload.priority,
+      });
+      state.sort((firstTodo, secondTodo) => {
+        // returns -ve (firstTodo will be placed before the secondTodo), zero (either of the values will be adjusted to each other), +ve (secondTodo will be placed before the firstTodo)
+        return PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority];
       });
     },
     markTodoDone(state, action) {
@@ -30,6 +41,11 @@ const todoSlice = createSlice({
     saveEditTodo(state, action) {
       const todoToBeEdited = state.find((todo) => todo.id === action.payload.todoId);
       todoToBeEdited.value = action.payload.value;
+      todoToBeEdited.priority = action.payload.priority;
+
+      state.sort((firstTodo, secondTodo) => {
+        return PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority];
+      });
     },
   },
 });
