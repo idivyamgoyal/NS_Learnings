@@ -60,6 +60,9 @@ export const MainScreen = (props) => {
     setIsEditing(false);
   };
 
+  /** this function will update the todos display order based upon the display order
+   * @param displayOrder accepts low, mid, & high values defined in `config.ts` file wrt `redux` configs
+   */
   const handleUpdateDisplayOrder = (displayOrder) => {
     dispatch({
       type: "todos/updateDisplayOrder",
