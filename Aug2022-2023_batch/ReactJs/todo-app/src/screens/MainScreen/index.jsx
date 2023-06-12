@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EditTodo, Input, Task } from "../../components";
+import { EditTodo, Input, PriorityOrder, Task } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 
 export const MainScreen = (props) => {
@@ -60,6 +60,13 @@ export const MainScreen = (props) => {
     setIsEditing(false);
   };
 
+  const handleUpdateDisplayOrder = (displayOrder) => {
+    dispatch({
+      type: "todos/updateDisplayOrder",
+      payload: { sortOrder: displayOrder },
+    });
+  };
+
   return (
     <div
       style={{
@@ -76,7 +83,14 @@ export const MainScreen = (props) => {
         <hr />
       </div>
       <Input handleSaveTodo={addTodo} isEditing={false} />
+
+      <div style={{ display: "flex", alignItems: "center", margin: "30px 0px 0px 10%" }}>
+        <h2 style={{ marginRight: "20px" }}>Display Order: </h2>
+        <PriorityOrder updateDisplayOrder={handleUpdateDisplayOrder} />
+      </div>
+
       <div style={{ margin: "10px 0px 10px 0px" }} />
+
       {todos.map((todo, index) => {
         return (
           <Task

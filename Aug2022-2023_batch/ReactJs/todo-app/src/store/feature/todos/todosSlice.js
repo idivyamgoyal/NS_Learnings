@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const PRIORITY_LABEL_ORDER = {
-  High: 1,
-  Mid: 2,
-  Low: 3,
-};
+import { PRIORITY_LABEL_ORDER } from "../../../configs";
 
 const todoSlice = createSlice({
   name: "todos",
@@ -57,6 +52,19 @@ const todoSlice = createSlice({
 
       state.sort((firstTodo, secondTodo) => {
         return PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority];
+      });
+    },
+    updateDisplayOrder(state, action) {
+      state.sort((firstTodo, secondTodo) => {
+        if (firstTodo.priority === action.payload.sortOrder) {
+          return -1;
+        } else if (secondTodo.priority === action.payload.sortOrder) {
+          return 1;
+        } else {
+          return (
+            PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority]
+          );
+        }
       });
     },
   },

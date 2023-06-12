@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { PRIORITY_ORDERS } from "../../configs";
 
-const PRIORITY_LABELS = ["Low", "Mid", "High"];
+const PRIORITY_LABELS = [PRIORITY_ORDERS.LOW, PRIORITY_ORDERS.MID, PRIORITY_ORDERS.HIGH];
 
 export const Input = (props) => {
   const [todo, setTodo] = useState(props.isEditing ? props.todoValue : "");
