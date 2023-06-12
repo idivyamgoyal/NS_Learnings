@@ -33,6 +33,18 @@ const todoSlice = createSlice({
     markTodoDone(state, action) {
       const todoToBeMarked = state.find((todo) => todo.id === action.payload.todoId);
       todoToBeMarked.isDone = true;
+
+      state.sort((firstTodo, secondTodo) => {
+        if (firstTodo.isDone) {
+          return 1;
+        } else if (secondTodo.isDone) {
+          return -1;
+        } else {
+          return (
+            PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority]
+          );
+        }
+      });
     },
     deleteTodo(state, action) {
       const todoIdxToBeDeleted = state.findIndex((todo) => todo.id === action.payload.todoId);
