@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EditTodo, Input, PriorityOrder, Task } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteFromLocalStorage, getFromLocalStorage } from "../../utils";
+import { TODOD_KEYS } from "../../configs";
 
 export const MainScreen = (props) => {
   // store
@@ -70,6 +72,20 @@ export const MainScreen = (props) => {
     });
   };
 
+  /** this function will delete all todos from the local-storage and will refresh the whole page */
+  const deleteAllTodos = () => {
+    deleteFromLocalStorage(TODOD_KEYS.saveTodoKey);
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const savedTodos = getFromLocalStorage(TODOD_KEYS.saveTodoKey);
+    dispatch({
+      type: "todos/loadTodosFromLocalStorage",
+      payload: { savedTodos },
+    });
+  }, []);
+
   return (
     <div
       style={{
@@ -82,7 +98,22 @@ export const MainScreen = (props) => {
         <EditTodo todo={editingTodo} handleSaveTodo={saveEditTodo} hideEditing={hideEditing} />
       )}
       <div style={{ marginBottom: "20px" }}>
-        <h1 style={{ paddingLeft: "15px" }}>TodoApp</h1>
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "15px 20px" }}>
+          <h1>TodoApp</h1>
+          <button
+            style={{
+              padding: "10px",
+              backgroundColor: "red",
+              color: "white",
+              border: "0px",
+              boxShadow: "0px 0px 4px 2px rgba(0, 0, 0, 0.25)",
+              cursor: "pointer",
+            }}
+            onClick={deleteAllTodos}
+          >
+            <strong>DELETE ALL TODOS</strong>
+          </button>
+        </div>
         <hr />
       </div>
       <Input handleSaveTodo={addTodo} isEditing={false} />

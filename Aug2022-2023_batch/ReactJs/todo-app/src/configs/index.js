@@ -11,3 +11,7 @@ export const PRIORITY_LABEL_ORDER = {
   [PRIORITY_ORDERS.MID]: 2,
   [PRIORITY_ORDERS.LOW]: 3,
 };
+
+export const TODOD_KEYS = {
+  saveTodoKey: "saved-todos-local-storage",
+};
