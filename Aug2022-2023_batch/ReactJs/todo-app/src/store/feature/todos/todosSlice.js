@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PRIORITY_LABEL_ORDER } from "../../../configs";
+import { sortTodosBasedOnDone } from "../../../utils";
 
 const todoSlice = createSlice({
   name: "todos",
@@ -30,15 +31,7 @@ const todoSlice = createSlice({
       todoToBeMarked.isDone = true;
 
       state.sort((firstTodo, secondTodo) => {
-        if (firstTodo.isDone) {
-          return 1;
-        } else if (secondTodo.isDone) {
-          return -1;
-        } else {
-          return (
-            PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority]
-          );
-        }
+        return sortTodosBasedOnDone(firstTodo, secondTodo);
       });
     },
     deleteTodo(state, action) {
@@ -57,13 +50,11 @@ const todoSlice = createSlice({
     updateDisplayOrder(state, action) {
       state.sort((firstTodo, secondTodo) => {
         if (firstTodo.priority === action.payload.sortOrder) {
-          return -1;
+          return firstTodo.isDone ? 1 : -1;
         } else if (secondTodo.priority === action.payload.sortOrder) {
-          return 1;
+          return secondTodo.isDone ? -1 : 1;
         } else {
-          return (
-            PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority]
-          );
+          return sortTodosBasedOnDone(firstTodo, secondTodo);
         }
       });
     },
