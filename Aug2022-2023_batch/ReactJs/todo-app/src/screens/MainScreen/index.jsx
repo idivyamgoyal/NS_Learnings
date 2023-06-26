@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { EditTodo, Input, PriorityOrder, Task } from "../../components";
+import { EditTodo, Input, Loader, PriorityOrder, Task } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFromLocalStorage, getFromLocalStorage } from "../../utils";
+import { constructTodoData, deleteFromLocalStorage, getFromLocalStorage } from "../../utils";
 import { TODOD_KEYS } from "../../configs";
+import { Services } from "../../firebase";
 
 export const MainScreen = (props) => {
   // store
@@ -12,13 +13,23 @@ export const MainScreen = (props) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editingTodo, setEditingTodo] = useState();
+  const [isNetworkBusy, setIsNetworkBusy] = useState(false);
 
   /**this function will add new-todo in the todo-list
    * @param todo this is the new todo which will be added in the list which is inserted in the end
    * @param priority this is the todo priority on which the todos are sorted and displayed
    */
-  const addTodo = (todo, priority) => {
-    dispatch({ type: "todos/addTodo", payload: { todo, priority } });
+  const addTodo = async (todo, priority) => {
+    setIsNetworkBusy(true);
+    const todoData = constructTodoData(todo, priority);
+    const response = await Services.addData(todoData);
+    if (response.success) {
+      todoData["id"] = response.todoId;
+      dispatch({ type: "todos/addTodo", payload: { todoData } });
+    } else {
+      window.alert("Oops! Something went wrong!!");
+    }
+    setIsNetworkBusy(false);
   };
 
   /**this function marks a todo done
@@ -31,8 +42,16 @@ export const MainScreen = (props) => {
   /**this function deletes a todo
    * @param todoId the todo associated with this todoId will be deleted
    */
-  const deleteTodo = (todoId) => {
-    dispatch({ type: "todos/deleteTodo", payload: { todoId } });
+  const deleteTodo = async (todoId) => {
+    setIsNetworkBusy(true);
+    const deleteTodoResponse = await Services.removeTodo(todoId);
+
+    if (deleteTodoResponse.success) {
+      dispatch({ type: "todos/deleteTodo", payload: { todoId } });
+    } else {
+      window.alert("Oops! Something went wrong!!");
+    }
+    setIsNetworkBusy(false);
   };
 
   /** this function take care to store the index of the todo which will be edited
@@ -94,6 +113,7 @@ export const MainScreen = (props) => {
         flexDirection: "column",
       }}
     >
+      {isNetworkBusy && <Loader />}
       {isEditing && (
         <EditTodo todo={editingTodo} handleSaveTodo={saveEditTodo} hideEditing={hideEditing} />
       )}
@@ -125,7 +145,7 @@ export const MainScreen = (props) => {
 
       <div style={{ margin: "10px 0px 10px 0px" }} />
 
-      {todos.map((todo, index) => {
+      {todos?.map((todo, index) => {
         return (
           <Task
             todo={todo}

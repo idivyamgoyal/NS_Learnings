@@ -43,3 +43,15 @@ export const getFromLocalStorage = (key) => {
 export const deleteFromLocalStorage = (key) => {
   localStorage.removeItem(key);
 }
+
+/** this function will return a todo-object
+ * @param todo this is the todo-value
+ * @param priority this is the todo's priority
+ */
+export const constructTodoData = (todo, priority) => {
+  return {
+    value: todo,
+    priority,
+    isDone: false
+  }
+}

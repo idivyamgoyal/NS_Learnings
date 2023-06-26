@@ -8,24 +8,18 @@ const todoSlice = createSlice({
   reducers: {
     addTodo(state, action) {
       if (
-        action.payload.todo === null ||
-        action.payload.todo === undefined ||
-        action.payload.todo === ""
+        action.payload.todoData.value === null ||
+        action.payload.todoData.value === undefined ||
+        action.payload.todoData.value === ""
       ) {
         window.alert("Empty Todo! Please enter a value to proceed...");
         return;
       }
-      state.push({
-        value: action.payload.todo,
-        isDone: false,
-        id: Date.now(),
-        priority: action.payload.priority,
-      });
+      state.push(action.payload.todoData);
       state.sort((firstTodo, secondTodo) => {
         // returns -ve (firstTodo will be placed before the secondTodo), zero (either of the values will be adjusted to each other), +ve (secondTodo will be placed before the firstTodo)
         return PRIORITY_LABEL_ORDER[firstTodo.priority] - PRIORITY_LABEL_ORDER[secondTodo.priority];
       });
-
       saveInLocalStorage(TODOD_KEYS.saveTodoKey, state);
     },
     markTodoDone(state, action) {
