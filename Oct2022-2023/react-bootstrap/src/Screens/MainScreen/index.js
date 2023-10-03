@@ -46,6 +46,18 @@ export class MainScreen extends React.Component {
     });
   };
 
+  // lifecycle methods
+  // this function will be called the very first time during screen rendering
+  componentDidMount() {
+    console.log("### screen01 mounted");
+  }
+
+  // this function will only be called when component will be removed/unmounted from the screen
+  // clear-up function
+  componentWillUnmount() {
+    console.log("### screen01 unmounted");
+  }
+
   render() {
     console.log("### screen01: ", ++renderCount);
 
